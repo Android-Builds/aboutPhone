@@ -87,15 +87,22 @@ class _MyAppState extends State<MyApp> {
         child: Scaffold(
           body: ListView(
             children: [
-              // ListTile(
-              //   title: InfoCard(
-              //     height: 200.0,
-              //     widget: Text('Hi'),
-              // //   ),
-              // ),
               ListTile(
                 title: InfoCard(
-                  height: 100.0,
+                  height: 200.0,
+                  widget: Image.asset(
+                    'assets/stag.png',
+                    height: 100.0,
+                  ),
+                  widgetHeight: 10.0,
+                  title: 'Stag OS version',
+                  spaceHeight: 10.0,
+                  subtitle: _deviceData['version.incremental'],
+                ),
+              ),
+              ListTile(
+                title: InfoCard(
+                  height: 80.0,
                   title: 'Android Version',
                   subtitle: _deviceData['version.release'] ?? '',
                   spaceHeight: 10.0,
@@ -113,14 +120,16 @@ class InfoCard extends StatelessWidget {
   const InfoCard({
     Key key,
     this.height,
-    //this.widget,
+    this.widget,
     this.title,
     this.subtitle,
     this.spaceHeight,
+    this.widgetHeight,
   }) : super(key: key);
 
   final height;
-  //final Widget widget;
+  final Widget widget;
+  final widgetHeight;
   final String title;
   final String subtitle;
   final spaceHeight;
@@ -137,23 +146,33 @@ class InfoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                widget ??
+                    Container(
+                      height: 0,
+                    ),
+                SizedBox(
+                  height: widgetHeight,
                 ),
-              ),
-              SizedBox(
-                height: spaceHeight,
-              ),
-              Text(
-                subtitle,
-              ),
-            ],
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: spaceHeight,
+                ),
+                Text(
+                  subtitle,
+                ),
+              ],
+            ),
           ),
         ),
       ),
