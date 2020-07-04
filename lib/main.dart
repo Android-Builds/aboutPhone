@@ -97,14 +97,15 @@ class _MyAppState extends State<MyApp> {
                   widgetHeight: 10.0,
                   title: 'Stag OS version',
                   spaceHeight: 10.0,
-                  subtitle: _deviceData['version.incremental'],
+                  subtitle: _deviceData['version.securityPatch'],
                 ),
               ),
               ListTile(
                 title: InfoCard(
                   height: 80.0,
+                  leftAligned: true,
                   title: 'Android Version',
-                  subtitle: _deviceData['version.release'] ?? '',
+                  subtitle: _deviceData['version.release'],
                   spaceHeight: 10.0,
                 ),
               ),
@@ -125,6 +126,7 @@ class InfoCard extends StatelessWidget {
     this.subtitle,
     this.spaceHeight,
     this.widgetHeight,
+    this.leftAligned = false,
   }) : super(key: key);
 
   final height;
@@ -133,6 +135,7 @@ class InfoCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final spaceHeight;
+  final bool leftAligned;
 
   @override
   Widget build(BuildContext context) {
@@ -150,26 +153,28 @@ class InfoCard extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: leftAligned
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.center,
               children: [
                 widget ??
                     Container(
                       height: 0,
                     ),
                 SizedBox(
-                  height: widgetHeight,
+                  height: widgetHeight ?? 10.0,
                 ),
                 Text(
-                  title,
+                  title ?? '',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
-                  height: spaceHeight,
+                  height: spaceHeight ?? 10.0,
                 ),
                 Text(
-                  subtitle,
+                  subtitle ?? '',
                 ),
               ],
             ),
