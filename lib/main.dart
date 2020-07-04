@@ -87,18 +87,18 @@ class _MyAppState extends State<MyApp> {
         child: Scaffold(
           body: ListView(
             children: [
-              ListTile(
-                title: InfoCard(
-                  height: 200.0,
-                  widget: Text('Hi'),
-                ),
-              ),
+              // ListTile(
+              //   title: InfoCard(
+              //     height: 200.0,
+              //     widget: Text('Hi'),
+              // //   ),
+              // ),
               ListTile(
                 title: InfoCard(
                   height: 100.0,
-                  widget: Text(
-                    _deviceData['version.release'] ?? '',
-                  ),
+                  title: 'Android Version',
+                  subtitle: _deviceData['version.release'] ?? '',
+                  spaceHeight: 10.0,
                 ),
               ),
             ],
@@ -113,11 +113,17 @@ class InfoCard extends StatelessWidget {
   const InfoCard({
     Key key,
     this.height,
-    this.widget,
+    //this.widget,
+    this.title,
+    this.subtitle,
+    this.spaceHeight,
   }) : super(key: key);
 
   final height;
-  final Widget widget;
+  //final Widget widget;
+  final String title;
+  final String subtitle;
+  final spaceHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +137,24 @@ class InfoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Center(
-          child: widget,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: spaceHeight,
+              ),
+              Text(
+                subtitle,
+              ),
+            ],
+          ),
         ),
       ),
     );
