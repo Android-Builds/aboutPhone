@@ -95,15 +95,9 @@ class _MyAppState extends State<MyApp> {
               ),
               ListTile(
                 title: InfoCard(
-                  height: 150.0,
-                  widget: Text('Hi'),
-                ),
-              ),
-              ListTile(
-                title: InfoCard(
                   height: 100.0,
                   widget: Text(
-                    _deviceData['version.baseOS'],
+                    _deviceData['version.release'] ?? '',
                   ),
                 ),
               ),
@@ -127,19 +121,17 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: SizedBox(
-        height: height,
-        width: 300.0,
-        child: Card(
-          color: Colors.grey[200],
-          margin: EdgeInsets.all(5.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Center(
-            child: widget,
-          ),
+    return Container(
+      height: height,
+      // width: 300.0,
+      child: Card(
+        color: Colors.grey[200],
+        margin: EdgeInsets.all(5.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Center(
+          child: widget,
         ),
       ),
     );
