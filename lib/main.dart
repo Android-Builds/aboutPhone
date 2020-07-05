@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'dart:io';
+import 'package:aboutPhone/pages/new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info/device_info.dart';
@@ -20,6 +21,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const platform = const MethodChannel("com.stag.about/Storage");
+
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
@@ -27,6 +30,17 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    getStorage();
+  }
+
+  var storage;
+
+  Future<void> getStorage() async {
+    try {
+      storage = await platform.invokeMethod('getStorage');
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> initPlatformState() async {
@@ -85,28 +99,75 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
-          body: ListView(
+          body: Column(
             children: [
-              ListTile(
-                title: InfoCard(
-                  height: 200.0,
-                  widget: Image.asset(
-                    'assets/stag.png',
-                    height: 100.0,
-                  ),
-                  widgetHeight: 10.0,
-                  title: 'Stag OS version',
-                  spaceHeight: 10.0,
-                  subtitle: _deviceData['version.securityPatch'],
+              Flexible(
+                child: ListView(
+                  children: _deviceData.keys.map(
+                    (String property) {
+                      return Row(
+                        children: <Widget>[
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              property,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.fromLTRB(
+                                  0.0, 10.0, 0.0, 10.0),
+                              child: Text(
+                                '${_deviceData[property]}',
+                                maxLines: 10,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ).toList(),
                 ),
               ),
-              ListTile(
-                title: InfoCard(
-                  height: 80.0,
-                  leftAligned: true,
-                  title: 'Android Version',
-                  subtitle: _deviceData['version.release'],
-                  spaceHeight: 10.0,
+              Flexible(
+                child: ListView(
+                  children: [
+                    ListTile(
+                      title: InfoCard(
+                        height: 200.0,
+                        widget: Image.asset(
+                          'assets/stag.png',
+                          height: 100.0,
+                        ),
+                        widgetHeight: 10.0,
+                        title: 'Stag OS version',
+                        spaceHeight: 10.0,
+                        subtitle: _deviceData['version.securityPatch'],
+                      ),
+                    ),
+                    ListTile(
+                      title: InfoCard(
+                        height: 85.0,
+                        leftAligned: true,
+                        title: 'Android Version',
+                        subtitle: _deviceData['version.release'],
+                        spaceHeight: 10.0,
+                      ),
+                    ),
+                    ListTile(
+                      title: InfoCard(
+                        height: 85.0,
+                        leftAligned: true,
+                        title: 'Model and Hardware',
+                        subtitle: _deviceData['model'],
+                        spaceHeight: 10.0,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -143,14 +204,15 @@ class InfoCard extends StatelessWidget {
       height: height,
       // width: 300.0,
       child: Card(
+        elevation: 0.0,
         color: Colors.grey[200],
-        margin: EdgeInsets.all(5.0),
+        margin: EdgeInsets.all(2.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(15.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: leftAligned
