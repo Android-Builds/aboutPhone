@@ -30,10 +30,17 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
-    getStorage();
+    getStorage().then((value) {
+      total = double.parse(storage['TotalInternal']) / 1024.0;
+      internal = double.parse(storage['FreeInternal']) / 1024.0;
+      print(total);
+      print(internal);
+    });
   }
 
   var storage;
+  double total = 0;
+  double internal = 0;
 
   Future<void> getStorage() async {
     try {
@@ -147,6 +154,18 @@ class _MyAppState extends State<MyApp> {
                         title: 'Stag OS version',
                         spaceHeight: 10.0,
                         subtitle: _deviceData['version.securityPatch'],
+                      ),
+                    ),
+                    ListTile(
+                      title: InfoCard(
+                        height: 140.0,
+                        leftAligned: true,
+                        title: 'Stroage',
+                        subtitle: internal.toStringAsFixed(2) +
+                            ' GB of ' +
+                            total.toStringAsFixed(2) +
+                            ' GB used',
+                        spaceHeight: 60.0,
                       ),
                     ),
                     ListTile(
